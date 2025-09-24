@@ -32,10 +32,10 @@ void criarTurma(){ //Funcao de nova turma
         return;
     }
 
-    printf("zn- - - Criar uma turma: - - -");
-    printf("Informe o número da turma: ");
+    printf("\n- - - Criar uma turma: - - -\n");
+    printf("\nInforme o número da turma: ");
     scanf("%d", &turmas[qtdTurmas].numTurma);
-    printf("Informe a letra da turma: ");
+    printf("\nInforme a letra da turma: ");
     scanf(" %c", &turmas[qtdTurmas].letraTurma);
     
     turmas[qtdTurmas].qtdAlunos = 0; //Começa sem alunos.
@@ -46,12 +46,12 @@ void criarTurma(){ //Funcao de nova turma
 
 void mostrarTurmas(){ //Func. mostrar turmas.
     if(qtdTurmas == 0){
-        printf("Digite uma turma antes!!");
+        printf("\nDigite uma turma antes!!\n");
         return;
     }
     printf("\n - - - Lista de turmas - - -\n");
     for(int i = 0; i < qtdTurmas; i++){
-        printf("[%d] %dº %c - Alunos: %d\n", i, turmas[i].numTurma, turmas[i].letraTurma, turmas[i].qtdAlunos);
+        printf("\n[%d] %dº %c - Alunos: %d\n", i, turmas[i].numTurma, turmas[i].letraTurma, turmas[i].qtdAlunos);
     }
 }
 
@@ -126,7 +126,7 @@ void exibirAlunos(){ //Func. de exibir dados
 
     for(int t = 0; t < qtdTurmas; t++){
 
-        printf(" - - - Turma %dº%c", turmas[t].numTurma, turmas[t].letraTurma);
+        printf("\n - - - Turma %dº%c - - - \n", turmas[t].numTurma, turmas[t].letraTurma);
 
         if(turmas[t].qtdAlunos ==0){
             printf("Turma [%dº%c]sem alunos. \n\n", turmas[t].numTurma, turmas[t].letraTurma);   
@@ -151,7 +151,7 @@ void salvarDados(){ //Func. de salvar dados em um binario
         return; //Retorna com erro
     }
     fwrite(&qtdTurmas, sizeof(int), 1, arq); //Salva a quantidade de turmas
-    fwrite(&turmas, sizeof(struct Tturma), qtdTurmas, arq); 
+    fwrite(turmas, sizeof(struct Tturma), qtdTurmas, arq); 
     fclose(arq); //Fecha o arquivo
 
     printf("\nDados salvos em 'registro.bin'!\n");
@@ -161,7 +161,7 @@ void carregarDados() { //Func de carregar esses dadis
     FILE *arq = fopen("registro.bin", "rb"); //Abre o arquivo em modo leitura
     if (!arq) { //Se não houver arquivo
         printf("\nNenhum arquivo encontrado!\n"); 
-        return 1;
+        return;
     }
 
     fread(&qtdTurmas, sizeof(int), 1, arq);
