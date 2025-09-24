@@ -1,14 +1,14 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
-#define ALUNOS 40 //Maximo de alunos
-#define TURMAS 10 //Maximo de turmas
+#define ALUNOS 4 //Maximo de alunos
+#define TURMAS 2 //Maximo de turmas
 
 //Estrutura dos alunos
 struct Taluno{
     char nome[100];
     char situacao[10];
-    int matricula[10];
+    int matricula;
     int faltas;
     float media;
     float nota1;
@@ -36,7 +36,7 @@ void criarTurma(){ //Funcao de nova turma
     printf("Informe o número da turma: ");
     scanf("%d", &turmas[qtdTurmas].numTurma);
     printf("Informe a letra da turma: ");
-    printf(" %c", &turmas[qtdTurmas].letraTurma);
+    scanf(" %c", &turmas[qtdTurmas].letraTurma);
     
     turmas[qtdTurmas].qtdAlunos = 0; //Começa sem alunos.
     qtdTurmas++;
@@ -114,7 +114,7 @@ void inserirAlunosTurma(){//Func. de inserir alunos
         
         turmas[indice].qtdAlunos++;
     }
-    printf("\NAlunos cadastrados.\n");
+    printf("\nAlunos cadastrados");
 }
 
 void exibirAlunos(){ //Func. de exibir dados
@@ -148,7 +148,7 @@ void salvarDados(){ //Func. de salvar dados em um binario
     FILE *arq = fopen("registro.bin", "wb+"); //Abre o arquivo em modo escrita. usando um ponteiro.
     if(!arq){ //Se não abri o arquivo
         printf("\nErro ao abrir seu arquivo!\n");
-        return 1; //Retorna com erro
+        return; //Retorna com erro
     }
     fwrite(&qtdTurmas, sizeof(int), 1, arq); //Salva a quantidade de turmas
     fwrite(&turmas, sizeof(struct Tturma), qtdTurmas, arq); 
@@ -157,7 +157,7 @@ void salvarDados(){ //Func. de salvar dados em um binario
     printf("\nDados salvos em 'registro.bin'!\n");
 }
 
-void carregarDados() {//Func de carregar esses dadis
+void carregarDados() { //Func de carregar esses dadis
     FILE *arq = fopen("registro.bin", "rb"); //Abre o arquivo em modo leitura
     if (!arq) { //Se não houver arquivo
         printf("\nNenhum arquivo encontrado!\n"); 
