@@ -1,6 +1,8 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+
 #define ALUNOS 4 //Maximo de alunos
 #define TURMAS 2 //Maximo de turmas
 
@@ -33,15 +35,19 @@ void criarTurma(){ //Funcao de nova turma
     }
 
     printf("\n- - - Criar uma turma: - - -\n");
-    printf("\nInforme o número da turma: ");
+    printf("Informe o número da turma: ");
     scanf("%d", &turmas[qtdTurmas].numTurma);
-    printf("\nInforme a letra da turma: ");
+    printf("Informe a letra da turma: ");
     scanf(" %c", &turmas[qtdTurmas].letraTurma);
+
+    //Função para deixar maiuscula:
+    turmas[qtdTurmas].letraTurma = toupper(turmas[qtdTurmas].letraTurma);
     
     turmas[qtdTurmas].qtdAlunos = 0; //Começa sem alunos.
     qtdTurmas++;
 
-    printf("\nTurma criada com sucesso, %d espaços totais", 10 - qtdTurmas);
+    //Mensagem corrigida
+    printf("\nTurma criada com sucesso! Ainda pode criar %d turma(s).\n", TURMAS - qtdTurmas);
 }
 
 void mostrarTurmas(){ //Func. mostrar turmas.
@@ -49,35 +55,40 @@ void mostrarTurmas(){ //Func. mostrar turmas.
         printf("\nDigite uma turma antes!!\n");
         return;
     }
-    printf("\n - - - Lista de turmas - - -\n");
+    printf("\nLista de turmas\n");
     for(int i = 0; i < qtdTurmas; i++){
-        printf("\n[%d] %dº %c - Alunos: %d\n", i, turmas[i].numTurma, turmas[i].letraTurma, turmas[i].qtdAlunos);
+        printf("%d - [%d-%c] - Alunos: %d\n", i+1, turmas[i].numTurma, turmas[i].letraTurma, turmas[i].qtdAlunos);
     }
 }
 
 void inserirAlunosTurma(){//Func. de inserir alunos
     int indice, numCadastro, i;
     if (qtdTurmas == 0){ // Se já ouver turma
-        printf("\nNenhuma turma cadastrada! crie uma antes\n");
+        printf("\n[Nenhuma turma]\n");
         criarTurma();
     }
     
-    mostrarTurmas(); //Chama a func, anterior de mostrar turmas.
-    printf("Digite a turma que deseja cadastrar: ");
-    scanf("%d", &indice);
+    //Escolha da turma com repetição até ser válida
+    mostrarTurmas(); //Chama a func. anterior de mostrar turmas.
+    do {
+        printf("Digite a turma que deseja cadastrar: ");
+        scanf("%d", &indice);
+        indice--; //Subtrai um valor que o usuario digitar para ficar igual a formatação com +1
 
-    if(indice < 0 || indice >=qtdTurmas) { //Verifica se a turma é valida
-        printf("\nERRO: turma invalida!\n");
-        return;
-    }
+        if (indice < 0 || indice >= qtdTurmas) { //Verifica se a turma é válida
+            printf("ERRO: turma inválida! Tente novamente.\n");
+        }
+    } while (indice < 0 || indice >= qtdTurmas);
 
-    printf("Quantos alunos deseja cadastrar? ");
-    scanf("%d", &numCadastro);
+    do{   
+        printf("Quantos alunos deseja cadastrar? ");
+        scanf("%d", &numCadastro);
 
-    if (numCadastro + turmas[indice].qtdAlunos > ALUNOS){
-        printf("\nERRO: essa turma só pode ter no maximo %d alunos\n", ALUNOS);
-        return;
-    }
+        if (numCadastro + turmas[indice].qtdAlunos > ALUNOS){
+            printf("\nERRO: essa turma só pode ter no maximo %d alunos\n\n", ALUNOS);
+            
+        }
+    }while(numCadastro + turmas[indice].qtdAlunos > ALUNOS);
 
     for(i = 0; i < numCadastro; i++){
         int pos = turmas[indice].qtdAlunos;
@@ -93,14 +104,22 @@ void inserirAlunosTurma(){//Func. de inserir alunos
         printf("Matricula: ");
         scanf("%d", &turmas[indice].turma[pos].matricula);
         
-        printf("Faltas: ");
-        scanf("%d", &turmas[indice].turma[pos].faltas);
+        //Inserção de faltas com limite
+        do {
+            printf("Faltas (0 a 300): ");
+            scanf("%d", &turmas[indice].turma[pos].faltas);
+        } while (turmas[indice].turma[pos].faltas < 0 || turmas[indice].turma[pos].faltas > 300);
 
-        printf("Nota1: ");
-        scanf("%f", &turmas[indice].turma[pos].nota1);
+        //Inserção de notas com limite
+        do {
+            printf("Nota1 (0 a 10): ");
+            scanf("%f", &turmas[indice].turma[pos].nota1);
+        } while (turmas[indice].turma[pos].nota1 < 0 || turmas[indice].turma[pos].nota1 > 10);
 
-        printf("Nota2: ");
-        scanf("%f", &turmas[indice].turma[pos].nota2);
+        do {
+            printf("Nota2 (0 a 10): ");
+            scanf("%f", &turmas[indice].turma[pos].nota2);
+        } while (turmas[indice].turma[pos].nota2 < 0 || turmas[indice].turma[pos].nota2 > 10);
         
         //Calculo de media
         turmas[indice].turma[pos].media = (turmas[indice].turma[pos].nota1 + turmas[indice].turma[pos].nota2) / 2;
@@ -126,10 +145,10 @@ void exibirAlunos(){ //Func. de exibir dados
 
     for(int t = 0; t < qtdTurmas; t++){
 
-        printf("\n - - - Turma %dº%c - - - \n", turmas[t].numTurma, turmas[t].letraTurma);
+        printf("\n[%d-%c]\n", turmas[t].numTurma, turmas[t].letraTurma);
 
         if(turmas[t].qtdAlunos ==0){
-            printf("Turma [%dº%c]sem alunos. \n\n", turmas[t].numTurma, turmas[t].letraTurma);   
+            printf("Turma [%dº%c] sem alunos. \n\n", turmas[t].numTurma, turmas[t].letraTurma);   
         }
         for (i = 0; i < turmas[t].qtdAlunos;i++){
             printf("\n--- %dº aluno ---\n", i + 1);
@@ -145,31 +164,32 @@ void exibirAlunos(){ //Func. de exibir dados
 }
 
 void salvarDados(){ //Func. de salvar dados em um binario
-    FILE *arq = fopen("registro.bin", "wb+"); //Abre o arquivo em modo escrita. usando um ponteiro.
-    if(!arq){ //Se não abri o arquivo
-        printf("\nErro ao abrir seu arquivo!\n");
-        return; //Retorna com erro
+    FILE *arq = fopen("registro.bin", "wb"); //Abre o arquivo em modo escrita binária
+    if(!arq){ //Se não abrir o arquivo
+        printf("\nErro ao abrir o arquivo para salvar!\n");
+        return;
     }
     fwrite(&qtdTurmas, sizeof(int), 1, arq); //Salva a quantidade de turmas
-    fwrite(turmas, sizeof(struct Tturma), qtdTurmas, arq); 
+    fwrite(turmas, sizeof(struct Tturma), qtdTurmas, arq); //Salva todas as turmas já cadastradas
     fclose(arq); //Fecha o arquivo
 
     printf("\nDados salvos em 'registro.bin'!\n");
 }
 
-void carregarDados() { //Func de carregar esses dadis
-    FILE *arq = fopen("registro.bin", "rb"); //Abre o arquivo em modo leitura
+void carregarDados() { //Func de carregar dados do binário para struct
+    FILE *arq = fopen("registro.bin", "rb"); //Abre o arquivo em modo leitura binária
     if (!arq) { //Se não houver arquivo
-        printf("\nNenhum arquivo encontrado!\n"); 
+        printf("\nNenhum arquivo encontrado! Primeiro salve os dados.\n"); 
         return;
     }
 
-    fread(&qtdTurmas, sizeof(int), 1, arq);
-    fread(turmas, sizeof(struct Tturma), qtdTurmas, arq);
+    fread(&qtdTurmas, sizeof(int), 1, arq); //Carrega a quantidade de turmas
+    fread(turmas, sizeof(struct Tturma), qtdTurmas, arq); //Carrega os dados das turmas
     fclose(arq);
 
     printf("\nDados carregados de 'registro.bin'!\n");
 }
+
 
 // Parte principal
 int main(){
