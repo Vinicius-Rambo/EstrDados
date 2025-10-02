@@ -3,8 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
-#define ALUNOS 4 //Maximo de alunos
-#define TURMAS 2 //Maximo de turmas
+#define ALUNOS 40 //Maximo de alunos
+#define TURMAS 10 //Maximo de turmas
 
 //Estrutura dos alunos
 struct Taluno{
