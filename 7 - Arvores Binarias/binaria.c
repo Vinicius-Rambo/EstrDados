@@ -14,10 +14,10 @@ Arvore criarArvore(){
 void inserirArvore(Arvore *a, int valor){
 
     if((*a) == NULL){
-        (*a) = (Arvore)malloc(sizeof(struct elemento));
-        (*a) -> dado = valor;
-        (*a) ->esq = NULL;
-        (*a) ->dir = NULL;
+       (*a) = (Arvore)malloc(sizeof(struct elemento));
+       (*a) -> dado = valor;
+       (*a) ->esq = NULL;
+       (*a) ->dir = NULL;
     }
     //se a Arvore não tiver vazia
     else if(valor < (*a)-> dado){ 
