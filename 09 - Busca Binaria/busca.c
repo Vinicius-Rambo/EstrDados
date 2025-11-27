@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define TAM 10
+#define TAM 5
 
 int buscaSeq(int *vet, int qtd, int valor, int *tentativas){
   int i = 0; //Indice inical 
@@ -75,7 +75,11 @@ int main(){
       inserirOrdenado(seq, &qtd, valor);
     }
     
-    printf("Qual número deseja buscar: \n");
+    for(i = 0; i < TAM; i++){
+    	printf("%d - ", seq[i]);
+    }
+    
+    printf("\nQual número deseja buscar: ");
     scanf("%d", &valor);
     
     posSeq = buscaSeq(seq, qtd, valor, &tentSeq);
