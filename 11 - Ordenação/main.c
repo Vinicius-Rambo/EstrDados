@@ -4,6 +4,7 @@
 #include <time.h>
 #include "sort.h" 
 
+#define TAM 100000
 //Estava querendo testar como funciona a modularização no C, por isso fiz esses outros dois arquivos
 
 //Verifica se número já existe
@@ -51,10 +52,15 @@ int main(){
     printf("Digite o tamanho do vetor: ");
     scanf("%d", &tam);
 
+    if(tam < 1 || tam > TAM){
+        printf("Tamanho inválido!\n");
+        return 1;
+    }
+
     //Vetores estáticos (VLA)
     int dados[tam], bub[tam], mer[tam], aux[tam], qui[tam];
     
-    srand(time(NULL)); 
+    srand(time(NULL)); //Seed, de vetor sempre diferente 
     
     preencheVetor(dados, tam); //Preenche vetor
     
@@ -80,11 +86,11 @@ int main(){
     printf("QuickSort : %f s\n", tempo);
 
     //BubbleSort
-    ini = clock();
-    bubbleSort(bub, tam);
-    fim = clock();
-    tempo = (double)(fim - ini) / CLOCKS_PER_SEC;
-    printf("Bubble : %f s\n", tempo);
+    //ini = clock();
+    //bubbleSort(bub, tam);
+    //fim = clock();
+    //tempo = (double)(fim - ini) / CLOCKS_PER_SEC;
+    //printf("Bubble : %f s\n", tempo);
     
     return 0;
 }
