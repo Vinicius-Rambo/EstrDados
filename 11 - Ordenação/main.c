@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -8,37 +7,29 @@
 //Estava querendo testar como funciona a modularização no C, por isso fiz esses outros dois arquivos
 
 //Verifica se número já existe
-int existe(int dados[], int tam, int num){
-    for(int i = 0; i < tam; i++){
-        if(dados[i] == num)
-            return 1; //Já existe
+void vetorAleatorio(int *dados, int tam){
+    for(int i = tam - 1; i > 0; i--){
+        int j = rand() % (i + 1); //Posição aleatória
+        int temp = dados[i];      //Guarda valor
+        dados[i] = dados[j];      //Troca
+        dados[j] = temp;          //Finaliza troca
     }
-    return 0; //Não existe
 }
 
 //Preenche com números aleatórios únicos
-void preencheVetor(int *dados, int tam){
-    int num, t = 0;
-    
-    for(int i = 0; i < tam; i++){
-        num = rand() % (tam * 3); //Numero random
-      
-        if(existe(dados, t, num)){ //Se já existe
-            i--; //Tenta de novo
-            continue;
-        }
-
-        dados[i] = num; //Adiciona ao vetor
-        t++;
-    }
+int inserirVetor(int *dados, int tam){
+    for(int i = 0; i < tam; i++){ 
+        dados[i] = i + 1; //Preenche crescente
+    } 
+    vetorAleatorio(dados, tam); //Embaralha valores
+    return *(dados);
 }
 
 //Mostra vetor (debug)
 void mostrarVetor(int *dados, int tam){
     for(int i = 0; i < tam; i++){
-        printf("[%d]", dados[i]);
+        printf("[%d]\n", dados[i]);
     }
-    printf("\n");
 }
 
 int main(){
@@ -46,7 +37,9 @@ int main(){
     
     //Variaveis para o cronometro
     clock_t ini, fim;
-    double tempo;  // <-- Faltava ponto e vírgula
+    double tempo; 
+
+    srand(time(NULL)); //Seed, de vetor sempre diferente 
     
     printf("- - - Ordenações - - -\n");
     printf("Digite o tamanho do vetor: ");
@@ -59,11 +52,11 @@ int main(){
 
     //Vetores estáticos (VLA)
     int dados[tam], bub[tam], mer[tam], aux[tam], qui[tam];
-    
-    srand(time(NULL)); //Seed, de vetor sempre diferente 
-    
-    preencheVetor(dados, tam); //Preenche vetor
-    
+        
+    *dados = inserirVetor(dados, tam);
+
+    mostrarVetor(dados, tam);
+
     //Copia os valores aleatórios para cada vetor
     for(int i = 0; i < tam; i++){
         bub[i] = dados[i];
@@ -71,12 +64,13 @@ int main(){
         qui[i] = dados[i];
     }
     
+
     //MergeSort
     ini = clock();
     mergeSort(mer, aux, 0, tam - 1);
     fim = clock();
     tempo = (double)(fim - ini) / CLOCKS_PER_SEC;
-    printf("Merge : %f s\n", tempo);
+    printf("Merge     : %f s\n", tempo);
 
     // QuickSort 
     ini = clock();
@@ -90,8 +84,7 @@ int main(){
     //bubbleSort(bub, tam);
     //fim = clock();
     //tempo = (double)(fim - ini) / CLOCKS_PER_SEC;
-    //printf("Bubble : %f s\n", tempo);
+    //printf("Bubble    : %f s\n", tempo);
     
     return 0;
 }
-
