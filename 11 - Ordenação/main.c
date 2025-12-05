@@ -64,7 +64,6 @@ int main(){
         qui[i] = dados[i];
     }
     
-
     //MergeSort
     ini = clock();
     mergeSort(mer, aux, 0, tam - 1);
@@ -80,11 +79,11 @@ int main(){
     printf("QuickSort : %f s\n", tempo);
 
     //BubbleSort
-    //ini = clock();
-    //bubbleSort(bub, tam);
-    //fim = clock();
-    //tempo = (double)(fim - ini) / CLOCKS_PER_SEC;
-    //printf("Bubble    : %f s\n", tempo);
+    ini = clock();
+    bubbleSort(bub, tam);
+    fim = clock();
+    tempo = (double)(fim - ini) / CLOCKS_PER_SEC;
+    printf("Bubble    : %f s\n", tempo);
     
     return 0;
 }
